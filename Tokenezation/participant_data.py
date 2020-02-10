@@ -2,11 +2,17 @@ import nltk
 from nltk.tokenize import RegexpTokenizer
 from pathlib import Path
 import re
+import os
+import glob
 
 # Path to the files.
 dementia_data_folder = Path("Dementia/cookie")
-file_to_open = dementia_data_folder / "005-2.cha"
+file_to_open = dementia_data_folder / "001-0.cha"
 
+#File to write to
+result_file = "./001-0-R.txt"
+
+# print(type(glob.glob("Dementia/cookie/*.cha")))
 
 def clean_up(line):
     # Removing the numbers at the end. num = 42832_46845
@@ -23,9 +29,12 @@ def clean_up(line):
 switch = False
 
 # Opening and reading the file until the end of it.
-with open(file_to_open) as file:
+with open(file_to_open, "r") as file:
     data = file.readlines()
     tokenizer = RegexpTokenizer(r'[\w\']+')
+
+    #Testing it by appending the line to a list.
+    new_file_lines = []
 
     for line in data:
         # Removing the numbers at the end. num = 42832_46845
@@ -41,8 +50,15 @@ with open(file_to_open) as file:
         if PAR_lines == "*PAR":
             switch = True
             line_tokenized.pop(0)
-            print(line_tokenized)
+            # print(line_tokenized)
+            new_file_lines.append(line_tokenized);
         elif PAR_lines != "%mor" and switch:
-            print(line_tokenized)
+            new_file_lines.append(line_tokenized);
+            # print(line_tokenized)
         elif PAR_lines == "%mor":
             switch = False
+
+
+with open(result_file, "w") as output:
+    for listA in new_file_lines:
+        output.write('%s\n' % listA)
