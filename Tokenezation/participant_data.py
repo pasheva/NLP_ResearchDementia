@@ -5,17 +5,10 @@ import re
 import glob
 import os
 
-# Path to the files.
-# dementia_data_folder = Path("Dementia/cookie")
-# file_to_open = dementia_data_folder / "001-0.cha"
-
 def extractFileName(inputPath)-> str:
     filename_w_ext = os.path.basename(inputPath)
     file_name, file_extension = os.path.splitext(filename_w_ext)
     return file_name;
-
-#File to write to
-result_file = "./001-0-R.txt"
 
 def clean_up(line) -> str:
     # Removing the numbers at the end. num = 42832_46845
@@ -72,7 +65,10 @@ def writeFile(result_file, new_file_lines) -> None:
 
 
 def main():
+    #Windows users need to change the path to "Dementia\cookie\*.cha"
     file_list = glob.glob("Dementia/cookie/*.cha")
+
+    #Looping through all the files.
     for i in file_list:
         new_file_lines = readFile(i);
         output_file_name = extractFileName(i) + ".txt"
